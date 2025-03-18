@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import { getRequest } from "../utils/api";
-import { useAuth } from "../Context/AuthProvider";
-import ButtonCom from "../CommonComponent/ButtonCom";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "../../Context/AuthProvider";
+import { getRequest } from "../../utils/api";
+import ButtonCom from "../../CommonComponent/ButtonCom";
+
 
 const ExamDetail = () => {
     const { token } = useAuth();

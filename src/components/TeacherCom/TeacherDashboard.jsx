@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import TeacherForm from './TeacherForm'
-import ExamList from './ExamList'
-import ButtonCom from '../CommonComponent/ButtonCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+import TeacherForm from './TeacherForm';
+import ExamList from './ExamList';
 
 const TeacherDashboard = () => {
    const [displayForm, setDisplayForm] = useState(false);

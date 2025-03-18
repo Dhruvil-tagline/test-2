@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { getRequest } from "../utils/api";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../../Context/AuthProvider";
+import { getRequest } from "../../utils/api";
 import TeacherForm from "./TeacherForm";
 
 const EditExam = () => {

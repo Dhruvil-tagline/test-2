@@ -1,5 +1,5 @@
 import React from 'react'
-import ListStuExam from './ListStuExam'
+import ListStuExam from './ListStuExam';
 
 const StudentDashboard = () => {
   return (

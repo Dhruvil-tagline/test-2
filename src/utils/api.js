@@ -13,9 +13,10 @@ export const postRequest = async (url, data, headers = {}) => {
     } catch (error) {
         toast.error(error?.message || 'server Error');
     }
+    
 };
 
-export const putRequest = async(url, data, headers = {}) => {
+export const putRequest = async (url, data, headers = {}) => {
     console.log(url)
     console.log(data)
     console.log(headers);
@@ -55,3 +56,10 @@ export const deleteRequest = async (url, token = '') => {
         throw new Error('Server Error');
     }
 }
+
+
+
+
+
+
+

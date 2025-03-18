@@ -1,33 +1,43 @@
-import axios from 'axios';
 import React, { useState } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import InputCom from '../CommonComponent/InputCom';
-import ButtonCom from '../CommonComponent/ButtonCom';
-import { validatePassword } from '../utils/validation';
-import { postRequest } from '../utils/api';
-import { useAuth } from '../Context/AuthProvider';
+import { useAuth } from '../../Context/AuthProvider';
+import { postRequest } from '../../utils/api';
+import { validatePassword } from '../../utils/validation';
+import InputCom from '../../CommonComponent/InputCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+import { useLoader } from '../../Context/LoaderProvider';
 
 const NewPassword = () => {
     const { setToken } = useAuth();
+    const { setLoading } = useLoader();
     const [password, setPassword] = useState('');
     let token;
     const [searchParams] = useSearchParams();
     const [confirmPassword, setConfirm] = useState('');
     token = searchParams.get('token');
     const fetchData = async () => {
-        let response = await postRequest(`users/ForgotPassword/Verify?token=${token}`, { Password: password, ConfirmPassword: confirmPassword })
-        if (response) {
-            console.log(response)
+        try {
+            setLoading(true);
+            let response = await postRequest(`users/ForgotPassword/Verify?token=${token}`, { Password: password, ConfirmPassword: confirmPassword })
+            if (response) {
+                console.log(response)
+            }
+            if (response.statusCode === 200) {
+                toast.success('password reset successfully.');
+                // document.cookie = `token = ${token}`;
+                setToken(token);
+            }
+            else {
+                toast.error(response?.message)
+            }
+        } catch (error) {
+            console.log(error);
         }
-        if (response.statusCode === 200) {
-            toast.success('password reset successfully.');
-            // document.cookie = `token = ${token}`;
-            setToken(token);
+        finally {
+            setLoading(false);
         }
-        else {
-            toast.error(response?.message)
-        }
+       
     }
     const handleSubmit = (e) => {
         e.preventDefault();

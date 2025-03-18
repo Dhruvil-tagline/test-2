@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { getRequest, postRequest } from '../../utils/api';
 import { useAuth } from '../../Context/AuthProvider';
-import RadioCom from '../../CommonComponent/RadioCom';
+import { getRequest, postRequest } from '../../utils/api';
 import ButtonCom from '../../CommonComponent/ButtonCom';
+import RadioCom from '../../CommonComponent/RadioCom';
 
 const ExamForm = () => {
     const { state } = useLocation();

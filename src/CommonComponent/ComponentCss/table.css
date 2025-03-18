@@ -1,0 +1,10 @@
+ 
+ tr:nth-child(even){
+    background-color: rgb(61, 60, 60);
+ }
+ 
+ tr:hover{
+    background-color: black;
+    color: skyblue;
+ }
+

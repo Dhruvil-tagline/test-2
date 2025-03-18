@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { Link, useNavigate, } from 'react-router-dom'
-import '../Css/SignUp.css'
+import './AuthCss/SignUp.css'
 import { toast } from 'react-toastify';
-import { errorObj, userObj } from '../StaticData/staticObj';
-import InputCom from '../CommonComponent/InputCom';
-import ButtonCom from '../CommonComponent/ButtonCom';
-import { postRequest } from '../utils/api';
-import { validateEmail, validatePassword } from '../utils/validation';
-import { useAuth } from '../Context/AuthProvider';
+import { errorObj, userObj } from '../../StaticData/staticObj';
+import { useAuth } from '../../Context/AuthProvider';
+import { validateEmail, validatePassword } from '../../utils/validation';
+import InputCom from '../../CommonComponent/InputCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+import Loader from '../../CommonComponent/Loader';
+import { postRequest } from '../../utils/api';
+import { useLoader } from '../../Context/LoaderProvider';
 
 const Login = () => {
   const [user, setUser] = useState(userObj);
   const { setToken } = useAuth();
+  const { setLoading} = useLoader();
 
   const [error, setError] = useState(errorObj)
   const navigate = useNavigate();
@@ -28,16 +31,25 @@ const Login = () => {
 
   const isAuthenticated = async () => {
     console.log('function called');
-    let response = await postRequest('users/Login', user)
+    try {
+      setLoading(true);
+      let response = await postRequest('users/Login', user, setLoading)
       if (response.statusCode === 200) {
         setToken(response?.data?.token)
         setUser({ ...userObj });
         toast.success("Login successfully")
-        navigate(`/${response?.data?.role}`)
+        navigate(`/${response?.data?.role}/dashboard`)
       }
       else {
         toast.error('Invalid Credential')
       }
+    } catch (error) {
+       console.log(error)
+    }
+    finally {
+      setLoading(false)
+    }
+  
   }
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,6 +58,7 @@ const Login = () => {
   }
   return (
     <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
+      <Loader/>
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
         <h1 style={{ textAlign: 'center', marginBottom: "20px" }}>Login </h1>
         <label htmlFor='email'>Email:</label> <span className='error'>{error.emailError}</span> <br />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import ButtonCom from '../../CommonComponent/ButtonCom';
 import AllStudent from './TeacherStudentCom/AllStudent';
-import ButtonCom from '../CommonComponent/ButtonCom';
+
 
 const TeacherStu = () => {
   const [allStudent, setAllStudent] = useState(true);

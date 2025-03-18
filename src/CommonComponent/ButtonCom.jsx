@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import './ComponentCss/button.css'
 const ButtonCom = ({ onClick, text, type, disabled }) => {
   return (

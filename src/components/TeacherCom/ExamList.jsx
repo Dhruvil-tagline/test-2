@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { deleteRequest, getRequest } from '../utils/api'
-import { useAuth } from '../Context/AuthProvider';
-import ButtonCom from '../CommonComponent/ButtonCom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Context/AuthProvider';
+import { deleteRequest, getRequest } from '../../utils/api';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+
 
 
 const ExamList = () => {

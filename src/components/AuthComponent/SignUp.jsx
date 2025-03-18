@@ -1,15 +1,19 @@
 import { useState } from 'react'
+import './AuthCss/SignUp.css'
 import { Link, useNavigate } from 'react-router-dom'
-import '../Css/SignUp.css'
 import { toast } from 'react-toastify';
-import InputCom from '../CommonComponent/InputCom';
-import ButtonCom from '../CommonComponent/ButtonCom';
-import DropDown from '../CommonComponent/DropDown';
-import { sigUpErrorObj, signUpUserObj } from '../StaticData/staticObj'
-import { dropDownValidate, validateEmail, validateName, validatePassword, } from '../utils/validation';
-import { postRequest } from '../utils/api';
+import { dropDownValidate, validateEmail, validateName, validatePassword } from '../../utils/validation';
+import { postRequest } from '../../utils/api';
+import InputCom from '../../CommonComponent/InputCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+import DropDown from '../../CommonComponent/DropDown';
+import { signUpUserObj, sigUpErrorObj } from '../../StaticData/staticObj';
+import Loader from '../../CommonComponent/Loader';
+import { useLoader } from '../../Context/LoaderProvider';
+
 
 const SignUp = () => {
+  const { setLoading } = useLoader();
   const [user, setUser] = useState(signUpUserObj);
   const navigate = useNavigate();
   const [error, setError] = useState(sigUpErrorObj)
@@ -26,7 +30,9 @@ const SignUp = () => {
     return Object.values(errors).every((val) => !val);
   }
   const addUser = async () => {
-    let response = await postRequest('users/SignUp', user)
+    try {
+      setLoading(true);
+      let response = await postRequest('users/SignUp', user)
       if (response) {
         console.log(response)
       }
@@ -39,6 +45,13 @@ const SignUp = () => {
       else {
         toast.error(response?.message);
       }
+    } catch (error) {
+       console.log(error)
+    }
+    finally {
+      setLoading(false);
+    }
+
   }
 
   const handleSubmit = (e) => {
@@ -49,6 +62,7 @@ const SignUp = () => {
   const dropObj = [{ text: 'Select role', value: '' }, { text: 'Teacher', value: 'teacher' }, { text: 'Student', value: 'student' }]
   return (
     <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
+      <Loader/>
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
         <h1 style={{ textAlign: 'center', marginBottom: "20px" }}>SignUp </h1>
         <label htmlFor='name'>Name:</label> <span className='error'>{error.nameError}</span> <br />

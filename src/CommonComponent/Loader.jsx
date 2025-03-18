@@ -1,11 +1,14 @@
 import React from 'react'
 import './ComponentCss/Loader.css'
-const Loader = ({ loading, children }) => {
+import { useLoader } from '../Context/LoaderProvider'
+const Loader = () => {
+  const { isLoading } = useLoader();
+  if (!isLoading) {
+    return null;
+  }
   return (
-      <div style={{ width: '100vw', height: "80vh", display: "flex", alignItems: "center", justifyContent: "center",position:"relative" }}>
-          
-          {loading && <div style={{ position: 'absolute', width: "100vw", height: "80vh", display: "flex", alignItems: "center", justifyContent: "center" }}><span className="loader"></span></div> }
-          {children}
+    <div className='loader-container' >
+      {isLoading && <div className='loader-overlay'><span className="loader"></span></div>}
       </div>
   )
 }

@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import ButtonCom from '../CommonComponent/ButtonCom'
-import InputCom from '../CommonComponent/InputCom';
-import RadioCom from '../CommonComponent/RadioCom';
-import { validateEmpty } from '../utils/validation';
 import { toast } from 'react-toastify';
-import { useAuth } from '../Context/AuthProvider';
-import { postRequest, putRequest } from '../utils/api';
+import { useAuth } from '../../Context/AuthProvider';
+import { validateEmpty } from '../../utils/validation';
+import { postRequest, putRequest } from '../../utils/api';
+import InputCom from '../../CommonComponent/InputCom';
+import RadioCom from '../../CommonComponent/RadioCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
 const TOTAL_QUESTIONS = 15;
 
 const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {

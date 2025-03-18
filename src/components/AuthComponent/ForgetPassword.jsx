@@ -1,18 +1,24 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import InputCom from '../CommonComponent/InputCom';
-import ButtonCom from '../CommonComponent/ButtonCom';
-import { validateEmail } from '../utils/validation';
-import { postRequest } from '../utils/api';
+import { validateEmail } from '../../utils/validation';
+import InputCom from '../../CommonComponent/InputCom';
+import ButtonCom from '../../CommonComponent/ButtonCom';
+import { postRequest } from '../../utils/api';
+import { useLoader } from '../../Context/LoaderProvider';
+import Loader from '../../CommonComponent/Loader';
+
 
 const ForgetPassword = () => {
     const [search, setSearch] = useState('');
+    const { setLoading } = useLoader();
     const navigate = useNavigate();
     const [error, setError] = useState('');
 
     const searchUser = async () => {
-        let response = await postRequest('users/ForgotPassword', { email: search })
+        try {
+            setLoading(true);
+            let response = await postRequest('users/ForgotPassword', { email: search })
             if (response.statusCode === 200) {
                 console.log(response);
                 toast.success('check email and reset Password')
@@ -20,6 +26,12 @@ const ForgetPassword = () => {
             else {
                 toast.error('User not find!')
             }
+        } catch (error) {
+            console.log(error);
+        }
+        finally {
+            setLoading(false);
+        }
     }
     const handleSubmit = (e) => {
         setError('')
@@ -30,6 +42,7 @@ const ForgetPassword = () => {
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
+            <Loader/>
             <form onSubmit={handleSubmit} onReset={() => { setSearch(''); setError('') }} style={{ maxWidth: '500px', width: '100%' }}>
                     <h1>Find Your Account</h1> <br />
                     <p>Please enter your email address  to search for your account.</p>
@@ -40,7 +53,6 @@ const ForgetPassword = () => {
                      <ButtonCom onClick={() => navigate(-1)} text='Back'/>
                     </div>
                 </form> 
-
         </div>
     )
 }

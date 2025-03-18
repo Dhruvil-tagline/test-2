@@ -7,6 +7,10 @@ export const userObj = {
     password: '',
 }
 
+export const teacherNavObj = [{ to: 'dashboard', text: 'Dashboard' }, { to: 'student', text: 'Student' }, { to: 'profile', text: 'Profile' }]
+
+export const studentNavObj = [{ to: 'dashboard', text: 'Dashboard' }, { to: 'profile', text: 'Profile' }]
+
 
 export const sigUpErrorObj = {
     nameError: '',

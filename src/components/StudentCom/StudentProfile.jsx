@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { getRequest, putRequest } from '../../utils/api'
-import { useAuth } from '../../Context/AuthProvider'
+import { toast } from 'react-toastify';
+import { useAuth } from '../../Context/AuthProvider';
+import { getRequest, putRequest } from '../../utils/api';
+import { validateName } from '../../utils/validation';
 import InputCom from '../../CommonComponent/InputCom';
 import ButtonCom from '../../CommonComponent/ButtonCom';
-import { validateName } from '../../utils/validation';
 import TeacherProfile from '../TeacherProfile';
-import { toast } from 'react-toastify';
+
 
 const StudentProfile = () => {
     const { token } = useAuth();
