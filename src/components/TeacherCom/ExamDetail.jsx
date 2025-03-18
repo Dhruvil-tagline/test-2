@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../Context/AuthProvider";
 import { getRequest } from "../../utils/api";
 import ButtonCom from "../../CommonComponent/ButtonCom";
+import Table from "../../CommonComponent/Table";
 
 
 const ExamDetail = () => {
     const { token } = useAuth();
     const { state } = useLocation();
-    const [exam, setExam] = useState(null);
-    console.log(exam)
-    console.log(state.id);
-    console.log(token)
+    const navigate = useNavigate();
+    const initialSubject = state?.subject || "";
+    const initialNotes = state?.notes || ["", ""];
+    const [examData, setExamData] = useState({
+        subjectName: initialSubject,
+        notes: initialNotes,
+        questions: Array(15).fill().map(() => ({
+            question: "",
+            answer: "",
+            options: ["", "", "", ""],
+        })),
+    });
+
+    const handleEdit = (index) => {
+        navigate(`/teacher/exam/edit/${state.id}`, { state: { subject: initialSubject, notes: initialNotes, examId: state.id, currentQ: index, existingExam: examData } })
+    }
+
     useEffect(() => {
         const fetchExamDetails = async () => {
             const response = await getRequest(`dashboard/Teachers/examDetail?id=${state.id}`, token);
             if (response?.statusCode === 200) {
-                console.log(response.data)
-                setExam(response.data);
+                setExamData((prev) => ({
+                    ...prev,
+                    questions: response.data.questions,
+                }));
             } else {
                 console.log(response?.message);
             }
@@ -25,36 +41,24 @@ const ExamDetail = () => {
         fetchExamDetails();
     }, [state.id]);
 
-    if (!exam) return <h2>Loading Exam Details...</h2>;
-
+    const tableHeader = ['Index', 'Question', 'Answer', 'Action'];
+    console.log(examData)
+    const tableData = examData?.questions?.map((q, index) => ({
+        Index: index + 1,
+        Question: q?.question,
+        Answer: q?.answer,
+        Action: <ButtonCom text='Edit' onClick={() => handleEdit(index)} />,
+    }))
     return (
-        <div>
-            <h1>Exam Details - {state.subject}</h1>
-            <h3>Notes:</h3>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+            <div style={{ padding: "0px 30px", display: 'flex', justifyContent: 'space-between', maxWidth: "900px", width: "100%" }}>
+                <h1>{state.subject}</h1>
+                <p>Notes:
             {state.notes.map((note, index) => (
                 <p key={index}>• {note}</p>
-            ))}
-            <h3>Questions:</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Question</th>
-                        <th>Answer</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {exam.questions.map((q, index) => (
-                        <tr key={index} style={{ padding: "10px", borderBottom: "1px solid gray" }}>
-                            <td>{index + 1}</td>
-                            <td>{q.question}</td>
-                            <td>{q.answer}</td>
-                            <td><ButtonCom text='Edit' /></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            ))}</p>
+            </div>
+            <Table tableData={tableData} tableHeader={tableHeader} maxWidth='900px' />
         </div>
     );
 };

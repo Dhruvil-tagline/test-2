@@ -42,7 +42,8 @@ const ForgetPassword = () => {
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
-            <Loader/>
+            <Loader />
+            <div style={{ border: "1px solid gray", padding: '30px', maxWidth: '600px', width: '100%', borderRadius: "10px" }}>
             <form onSubmit={handleSubmit} onReset={() => { setSearch(''); setError('') }} style={{ maxWidth: '500px', width: '100%' }}>
                     <h1>Find Your Account</h1> <br />
                     <p>Please enter your email address  to search for your account.</p>
@@ -53,6 +54,7 @@ const ForgetPassword = () => {
                      <ButtonCom onClick={() => navigate(-1)} text='Back'/>
                     </div>
                 </form> 
+            </div>
         </div>
     )
 }

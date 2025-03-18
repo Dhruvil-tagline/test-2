@@ -35,7 +35,7 @@ const AllStudent = ({ apiEndpoint }) => {
     }))
     return (
         <div>
-            <h1>{apiEndpoint.includes('StudentForExam') ? 'Verified Students' : 'All Students'}</h1>
+            <h1 style={{ textAlign: 'center', color: "skyblue" }}>{apiEndpoint.includes('StudentForExam') ? 'Verified Students' : 'All Students'}</h1>
              <Table tableHeader={tableHeader} tableData={tableData} dataNotFound={dataNotFound}/> 
       
         </div>

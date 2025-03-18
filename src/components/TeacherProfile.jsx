@@ -26,22 +26,22 @@ const TeacherProfile = ({user}) => {
     }
   }
   return (
-    <div style={{ maxWidth: '600px', width: '100%', margin: "30px 0px", padding: "10px", border: '1px solid gray', borderRadius: "10px" }}>
-      <h1>{user} profile</h1>
-
+    <div style={{display:"flex", justifyContent:'center',alignItems:'center'}}>
+      <div style={{ maxWidth: '600px', width: '100%', margin: "30px 0px", padding: "20px", border: '1px solid gray', borderRadius: "10px" }}>
       <form onSubmit={handleSubmit} style={{ maxWidth: '600px', width: '100%' }}>
-        <h1>Reset Account password</h1>
+          <h1 style={{ textAlign: 'center', color: "skyblue" }}>Reset  password</h1>
         <br />
         <label htmlFor='oldPassword'>Old Password:</label>
         <span style={{ color: "red" }}>{error.oldPasswordError}</span>
-        <InputCom placeholder='New password' id='oldPassword' name='oldPassword' value={passwordObj.oldPassword} onChange={handleInput} />
+        <InputCom placeholder='Old password...' id='oldPassword' name='oldPassword' value={passwordObj.oldPassword} onChange={handleInput} />
         <label htmlFor='newPassword'>New Password:</label>
         <span style={{ color: "red" }}>{error.newPasswordError}</span>
-        <InputCom placeholder='New password' id='newPassword' name='Password' value={passwordObj.Password} onChange={handleInput} />
+        <InputCom placeholder='New password...' id='newPassword' name='Password' value={passwordObj.Password} onChange={handleInput} />
         <label htmlFor='confirmPassword'>Confirm Password:</label>
-        <InputCom placeholder='Confirm password' id='confirmPassword' name='ConfirmPassword' value={passwordObj.ConfirmPassword} onChange={handleInput} />
-        <ButtonCom text='Submit' type='submit' />
-      </form>
+        <InputCom placeholder='Confirm password...' id='confirmPassword' name='ConfirmPassword' value={passwordObj.ConfirmPassword} onChange={handleInput} />
+        <ButtonCom color='green' text='Submit' type='submit' />
+        </form>
+      </div>
     </div>
   )
 }

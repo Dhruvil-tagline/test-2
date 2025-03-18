@@ -12,7 +12,6 @@ const TeacherPage = ({navObj}) => {
         navigate('/login')
         toast.success('Logout Successfully')
     }
-
     return (
         <div>
             <nav style={{ display: 'flex', background: 'black', justifyContent: "space-between", alignItems: "center", padding: "0px 5%", }}>

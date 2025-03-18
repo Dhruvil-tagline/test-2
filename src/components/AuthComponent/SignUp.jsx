@@ -62,7 +62,8 @@ const SignUp = () => {
   const dropObj = [{ text: 'Select role', value: '' }, { text: 'Teacher', value: 'teacher' }, { text: 'Student', value: 'student' }]
   return (
     <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
-      <Loader/>
+      <Loader />
+      <div style={{ border: "1px solid gray", padding: '30px', maxWidth: '600px', width: '100%', borderRadius: "10px" }}>
       <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
         <h1 style={{ textAlign: 'center', marginBottom: "20px" }}>SignUp </h1>
         <label htmlFor='name'>Name:</label> <span className='error'>{error.nameError}</span> <br />
@@ -77,8 +78,9 @@ const SignUp = () => {
         <div style={{ textAlign: 'center', marginBottom: "20px" }}>
           <ButtonCom type='submit' text='Submit' />
         </div>
-        <p>If you are already SignUp than sing in <Link to='/login'> Login</Link></p>
+        <p>If you are already SignUp than sing in -<Link to='/login' style={{textDecoration:'underline'}}> Login</Link></p>
       </form>
+      </div>
     </div>
   )
 }

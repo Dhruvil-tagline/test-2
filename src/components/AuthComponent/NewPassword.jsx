@@ -37,7 +37,7 @@ const NewPassword = () => {
         finally {
             setLoading(false);
         }
-       
+
     }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,13 +47,15 @@ const NewPassword = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
 
-            <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
-                <h1>Reset Account password</h1>
-                <br />
-                <InputCom placeholder='New password' value={password} onChange={(e) => setPassword(e.target.value)} />
-                <InputCom placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} />
-                <ButtonCom text='Submit' type='submit' />
-            </form>
+            <div style={{ border: "1px solid gray", padding: '30px', maxWidth: '600px', width: '100%', borderRadius: "10px" }}>
+                <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
+                    <h1>Reset Account password</h1>
+                    <br />
+                    <InputCom placeholder='New password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <InputCom placeholder='Confirm password' value={confirmPassword} onChange={(e) => setConfirm(e.target.value)} />
+                    <ButtonCom text='Submit' type='submit' />
+                </form>
+            </div>
         </div>
     )
 }

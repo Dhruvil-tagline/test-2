@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate, } from 'react-router-dom'
 import './AuthCss/SignUp.css'
+import login from '../../assets/login.jpg'
 import { toast } from 'react-toastify';
 import { errorObj, userObj } from '../../StaticData/staticObj';
 import { useAuth } from '../../Context/AuthProvider';
@@ -57,9 +58,10 @@ const Login = () => {
     (validate()) && isAuthenticated();
   }
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px' }}>
-      <Loader/>
-      <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px', }}>
+      <Loader />
+      <div style={{ border: "1px solid gray", padding: '30px', maxWidth: '600px', width: '100%', borderRadius:"10px"}}>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '500px', width: '100%', }}>
         <h1 style={{ textAlign: 'center', marginBottom: "20px" }}>Login </h1>
         <label htmlFor='email'>Email:</label> <span className='error'>{error.emailError}</span> <br />
         <InputCom type='email' value={user.email}  onChange={(e) => handleChange(e)} id='email' name='email'/>
@@ -69,10 +71,11 @@ const Login = () => {
         <div style={{ textAlign: 'center', marginBottom: "20px" }}>
         <ButtonCom text='Submit' type='submit'/>
         </div>
-        <p><Link to='/forgetPassword'>Forget password</Link></p>
+          <p ><Link to='/forgetPassword' style={{ textDecoration: 'underline' }}>Forget password</Link></p>
         <br/>
-              <p>If you are not SingUp yet?  <Link to='/signup'> SignUp</Link></p>
+          <p style={{ marginLeft: "20px" }}>If you are not SingUp yet? <Link to='/signup' style={{ textDecoration: 'underline' }}> SignUp</Link></p>
       </form>
+      </div>
     </div>
   )
 }

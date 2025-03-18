@@ -6,10 +6,14 @@ import { postRequest, putRequest } from '../../utils/api';
 import InputCom from '../../CommonComponent/InputCom';
 import RadioCom from '../../CommonComponent/RadioCom';
 import ButtonCom from '../../CommonComponent/ButtonCom';
+import { useLocation, useNavigate } from 'react-router-dom';
 const TOTAL_QUESTIONS = 15;
 
-const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
+const TeacherForm = () => {
     const { token } = useAuth();
+    const navigate = useNavigate();
+    const { state } = useLocation();
+    console.log(state);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [allQuestionError, setAllQuestionError] = useState(Array(15).fill(false))
     const [questionsError, setQuestionsError] = useState({ questionError: "", answerError: "", optionsError: "" });
@@ -17,13 +21,13 @@ const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
         subjectError: '', queError: '', noteError: ""
     });
     const [examData, setExamData] = useState({
-        subjectName: existingExam?.subjectName || "",
-        questions: existingExam?.questions || Array(TOTAL_QUESTIONS).fill().map(() => ({
+        subjectName: state?.existingExam?.subjectName || "",
+        questions: state?.existingExam?.questions || Array(TOTAL_QUESTIONS).fill().map(() => ({
             question: "",
             answer: "",
             options: ["", "", "", ""],
         })),
-        notes: existingExam?.notes || ["", ""],
+        notes: state?.existingExam?.notes || ["", ""],
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFormReset, setIsFormReset] = useState(false);
@@ -134,17 +138,18 @@ const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
     useEffect(() => {
         if (isSubmitting) {
 
-            const apiEndpoint = examId ? `dashboard/Teachers/editExam?id=${examId}` : "dashboard/Teachers/Exam";
-            const requestMethod = examId ? putRequest : postRequest;
+            const apiEndpoint = state?.examId ? `dashboard/Teachers/editExam?id=${state?.examId}` : "dashboard/Teachers/Exam";
+            const requestMethod = state?.examId ? putRequest : postRequest;
             requestMethod(apiEndpoint, examData, { 'access-token': token })
                 .then((response) => {
                     if (response?.statusCode === 200) {
                         console.log(response);
-                        toast.success(examId ? "Exam Updated Successfully!" : "Exam Created Successfully!");
+                        toast.success(state?.examId ? "Exam Updated Successfully!" : "Exam Created Successfully!");
                         resetForm();
-                        if (onExamCreated) {
-                            onExamCreated();
+                        if (state?.examId) {
+                            navigate(-1);
                         }
+
                     } else {
                         toast.error(response?.message);
                     }
@@ -163,19 +168,20 @@ const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
     }, [isFormReset]);
 
     useEffect(() => {
-        if (existingExam) {
-            setExamData(existingExam);
+        if (state?.existingExam) {
+            setExamData(state?.existingExam);
+            setCurrentQuestion(state?.currentQ);
             setAllQuestionError(Array(15).fill(true));
         }
-    }, [existingExam]);
+    }, [state?.existingExam,]);
 
     return (
         <div>
             <div>
-                <h1>{existingExam ? "Edit Exam" : "Create Exam"}</h1>
+                <h1 style={{textAlign:'center', color:"skyBlue"}}>{state?.existingExam ? "Edit Exam" : "Create Exam"}</h1>
 
                 <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px', }}>
-                    <div style={{ minWidth: "700px" }}>
+                    <div style={{ minWidth: "700px", maxWidth:"800px" }}>
                         <label htmlFor='subjectName' style={{ fontSize: '20px' }}>Subject Name</label> <span style={{ color: 'red' }}>{error.subjectError}</span>
                         <InputCom type='text' name='subjectName' id='subjectName' value={examData.subjectName} onChange={(e) => setExamData({ ...examData, subjectName: e.target.value })} placeholder='Subject Name' />
                         <label style={{ display: 'inline-block', margin: "20px 0px", fontSize: "20px" }}>Question</label><span style={{ color: 'red' }}>{error.queError}</span>
@@ -219,7 +225,7 @@ const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
                                     })}
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: "space-between" }}>
+                            <div style={{ display: 'flex', justifyContent: "space-between", padding:"10px 0px" }}>
                                 <ButtonCom disabled={currentQuestion === 0} text='Previous' onClick={() => { handleQuestionSave(currentQuestion, 'previous') }} />
                                 <ButtonCom text='Next' disabled={currentQuestion === TOTAL_QUESTIONS - 1} onClick={() => { handleQuestionSave(currentQuestion, 'next') }} />
                             </div>
@@ -234,13 +240,14 @@ const TeacherForm = ({ existingExam = null, examId = '', onExamCreated }) => {
                                 onChange={(e) => handleNoteChange(index, e.target.value)}
                             />
                         ))}
-                        <div style={{ display: 'flex', justifyContent: "space-between", marginTop: "20px" }}>
-                            <ButtonCom text='Cancel' onClick={resetForm} style={{ backgroundColor: 'gray' }} />
-                            <ButtonCom text={existingExam ? "Update" : "Submit"} onClick={handleSubmit} />
+                        <div style={{ display: 'flex', justifyContent: "space-between",}}>
+                            <ButtonCom text='Cancel' color='red' onClick={resetForm} style={{ backgroundColor: 'gray' }} />
+                            <ButtonCom text='Back' onClick={() => navigate(-1)} />
+                            <ButtonCom color='green' text={state?.existingExam ? "Update" : "Submit"} onClick={handleSubmit} />
                         </div>
                     </div>
                 </div>
-
+            
             </div>
 
         </div>

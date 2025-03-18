@@ -1,8 +1,8 @@
 import './ComponentCss/button.css'
-const ButtonCom = ({ onClick, text, type, disabled }) => {
+const ButtonCom = ({ onClick, text, type, disabled, color }) => {
   return (
     <>
-          <button className='button' disabled={disabled} style={{ border: '1px solid  transparent', borderRadius: '8px', padding: '0.6em 2em', fontSize: '1em', background:'#1a1a1a',cursor:'pointer', }} type={type} onClick={onClick}>{text}</button>
+      <button className='button' disabled={disabled} style={{ color: color || 'white' }} type={type} onClick={onClick}>{text}</button>
     </>
   )
 }
