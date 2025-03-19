@@ -11,9 +11,7 @@ import ForgetPassword from './components/AuthComponent/ForgetPassword';
 import NewPassword from './components/AuthComponent/NewPassword';
 import Login from './components/AuthComponent/Login';
 import TeacherDashboard from './components/TeacherCom/TeacherDashboard';
-import TeacherStu from './components/TeacherCom/TeacherStu';
 import StudentDetails from './components/TeacherCom/TeacherStudentCom/StudentDetails';
-import TeacherProfile from './components/TeacherProfile';
 import ExamList from './components/TeacherCom/ExamList';
 import TeacherForm from './components/TeacherCom/TeacherForm';
 import ExamDetail from './components/TeacherCom/ExamDetail';
@@ -24,6 +22,9 @@ import StudentProfile from './components/StudentCom/StudentProfile';
 import ExamForm from './components/StudentCom/ExamForm';
 import StudentResult from './components/StudentCom/StudentResult';
 import { studentNavObj, teacherNavObj } from './StaticData/staticObj';
+import AllStudent from './components/TeacherCom/TeacherStudentCom/AllStudent';
+import EditProfile from './components/StudentCom/EditProfile';
+import ResetPassword from './components/ResetPassword';
 
 
 const router = createBrowserRouter([
@@ -32,61 +33,74 @@ const router = createBrowserRouter([
     element: <Protected><Home /></Protected>,
     children: [
       {
-        path: '/teacher',
+        path: 'teacher',
         element: <Navbar navObj={teacherNavObj} />,
         children: [
           {
-            path: '/teacher/dashboard',
+            path: 'dashboard',
             element: <TeacherDashboard />,
           },
           {
-            path: '/teacher/student',
-            element: <TeacherStu />,
+            path: 'teacherForm',
+            element: <TeacherForm/>
           },
           {
-            path: '/teacher/student/:id',
+            path: 'student',
+            element: <AllStudent />,
+          },
+          {
+            path: 'student/:id',
             element: <StudentDetails />,
           },
           {
-            path: '/teacher/profile',
-            element: <TeacherProfile user='Teacher' />,
+            path: 'profile',
+            element: <ResetPassword />,
           },
           {
-            path: '/teacher/exams',
+            path: 'exams',
             element: <ExamList />,
           },
           {
-            path: '/teacher/exam/create',
+            path: 'exam/create',
             element: <TeacherForm />,
           },
           {
-            path: '/teacher/exam/:id',
+            path: 'exam/:id',
             element: <ExamDetail />,
           },
           {
-            path: '/teacher/exam/edit/:id',
+            path: 'exam/edit/:id',
             element: <EditExam />,
           },
         ]
       },
       {
-        path: '/student/',
+        path: '/student',
         element: <Navbar navObj={studentNavObj} />,
         children: [
           {
-            path: '/student/dashboard',
+            path: 'dashboard',
             element: <StudentDashboard />
           },
           {
-            path: '/student/profile',
-            // element: <TeacherProfile user='Student'/>
-            element: <StudentProfile />
+            path: 'profile',
+            element: <StudentProfile />,
+            children: [
+              {
+                path: "editName",
+                element: <EditProfile />
+              },
+              {
+                path: "resetPassword",
+                element: <ResetPassword />
+              }
+            ]
           }, {
-            path: '/student/examForm',
+            path: 'examForm',
             element: <ExamForm />,
           },
           {
-            path: '/student/result',
+            path: 'result',
             element: <StudentResult />
           }
         ]

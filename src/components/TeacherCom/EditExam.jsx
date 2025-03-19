@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../Context/AuthProvider";
 import { getRequest } from "../../utils/api";
@@ -24,7 +24,6 @@ const EditExam = () => {
         const fetchExamDetails = async () => {
             const response = await getRequest(`dashboard/Teachers/examDetail?id=${state.id}`, token);
             if (response?.statusCode === 200) {
-                console.log(response);
                 setExamData((prev) => ({
                     ...prev,
                     questions: response.data.questions,}));
@@ -34,8 +33,6 @@ const EditExam = () => {
         };
         fetchExamDetails();
     }, [state.id]);
-
-    if (!examData) return <h2>Loading...</h2>;
 
     return <TeacherForm existingExam={examData} examId={state.id}/>;
 };

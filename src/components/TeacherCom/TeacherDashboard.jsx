@@ -1,19 +1,16 @@
-import React, { useState } from 'react'
 import ButtonCom from '../../CommonComponent/ButtonCom';
-import TeacherForm from './TeacherForm';
 import ExamList from './ExamList';
+import { useNavigate } from 'react-router-dom';
 
 const TeacherDashboard = () => {
-   const [displayForm, setDisplayForm] = useState(false);
-  const [refreshExamList, setRefreshExamList] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <div style={{padding: '0px 20px'}}>
-      <div style={{ marginBottom: "10px" }}>
-        <ButtonCom text='Create Exam' onClick={() => setDisplayForm(!displayForm)} />
+    <div style={{ padding: '0px 20px', }}>
+      <div style={{ marginBottom: "10px", display: "flex", justifyContent: 'center' }}>
+        <ButtonCom text='Create New  Exam' color='blue' onClick={() => navigate('/teacher/teacherForm')} />
       </div>
-      {displayForm && <TeacherForm onExamCreated={() => setRefreshExamList(prev => !prev)} />}
-      <ExamList key={refreshExamList}/>
+      <ExamList />
     </div>
   )
 }

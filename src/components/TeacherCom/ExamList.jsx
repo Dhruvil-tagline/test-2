@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthProvider';
 import { deleteRequest, getRequest } from '../../utils/api';
 import ButtonCom from '../../CommonComponent/ButtonCom';
 import Table from '../../CommonComponent/Table';
-
-
+const tableHeader = ['Subject', 'Email', 'Notes', 'View Exam', 'Delete Exam'];
 
 const ExamList = () => {
     const { token } = useAuth();
@@ -15,7 +14,6 @@ const ExamList = () => {
     const [exams, setExams] = useState([]);
     const [dataNotFound, setDataNotFound] = useState(false);
     const handleExaView = async (exam) => { navigate(`/teacher/exam/${exam._id}`, { state: { subject: exam.subjectName, notes: exam.notes, id: exam._id } }); }
-    const handleExaEdit = (exam) => { navigate(`/teacher/exam/edit/${exam._id}`, { state: { subject: exam.subjectName, notes: exam.notes, id: exam._id } }); }
     const handleExaDelete = async (id) => {
         let x = confirm('Are you sure want to Delete Exam?');
         if (x) {
@@ -37,21 +35,25 @@ const ExamList = () => {
             }
             else {
                 console.log(response?.message);
+                setDataNotFound(true);
             }
         }
         fetchData();
     }, [refetch]);
-    const tableHeader = ['Subject', 'Email', 'Notes', 'View Exam', 'Delete Exam'];
-    const tableData = exams.map((val, index) => ({
-        Subject: val.subjectName,
-        Email: val.email,
-        Notes: val.notes.join(', '),
-        'View Exam': <ButtonCom text='View Exam' onClick={() => handleExaView(val)} color='green' />,
-        'Delete Exam': <ButtonCom text='Delete Exam' onClick={() => handleExaDelete(val._id)} color='red' />
-    }))
+    const tableData = useMemo(() => {
+        return exams.map((val) => ({
+            Subject: val.subjectName,
+            Email: val.email,
+            Notes: val.notes.join(', '),
+            'View Exam': <ButtonCom text='View Exam' onClick={() => handleExaView(val)} color='green' />,
+            'Delete Exam': <ButtonCom text='Delete Exam' onClick={() => handleExaDelete(val._id)} color='red' />
+        }));
+    })
     return (
         <div>
-            <Table tableHeader={tableHeader} tableData={tableData} />
+            <div style={{ maxWidth: "1100px", margin: "0px auto" }}>
+                <Table tableHeader={tableHeader} tableData={tableData} dataNotFound={dataNotFound} />
+            </div>
         </div>
     )
 }

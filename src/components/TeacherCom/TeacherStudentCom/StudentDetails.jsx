@@ -37,12 +37,14 @@ const StudentDetails = () => {
     }, [id]);
 
     return (
-        <div>
-            <div style={{display:'flex',justifyContent:'space-between', padding:"10px 30px", color:"green", fontSize:"20px"}}>
+        <div style={{display:"flex",justifyContent:"center", flexDirection:"column", alignItems:'center'}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: "10px 30px", color:"rgb(18, 219, 206)", fontSize:"20px", maxWidth:"700px", width:'100%', flexWrap:"wrap", gap:"20px"}}>
             <p>Name: {studentData?.name}</p>
             <p>Email: { studentData?.email}</p>
             </div>
+            <div style={{maxWidth:"700px", width:"100%", padding:"20px"}}>
             <Table tableHeader={tableHeader} tableData={tableData} dataNotFound={ dataNotFound} />
+            </div>
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <ButtonCom text='Back' onClick={() => navigate(-1)} style={{ backgroundColor: '#f1c40f', color: '#121212', padding: '10px 20px', borderRadius: '5px', border: 'none', cursor: 'pointer' }} />
             </div>

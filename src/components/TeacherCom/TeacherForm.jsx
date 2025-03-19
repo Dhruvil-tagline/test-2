@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Context/AuthProvider';
 import { validateEmpty } from '../../utils/validation';
@@ -13,13 +13,10 @@ const TeacherForm = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
     const { state } = useLocation();
-    console.log(state);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [allQuestionError, setAllQuestionError] = useState(Array(15).fill(false))
     const [questionsError, setQuestionsError] = useState({ questionError: "", answerError: "", optionsError: "" });
-    const [error, setError] = useState({
-        subjectError: '', queError: '', noteError: ""
-    });
+    const [error, setError] = useState({ subjectError: '', queError: '', noteError: "" });
     const [examData, setExamData] = useState({
         subjectName: state?.existingExam?.subjectName || "",
         questions: state?.existingExam?.questions || Array(TOTAL_QUESTIONS).fill().map(() => ({
@@ -92,32 +89,18 @@ const TeacherForm = () => {
         errors.noteError = '';
         errors.queError = '';
         errors.subjectError = validateEmpty(examData.subjectName, 'Subject name');
-        examData.notes.map((val) => {
-            if (!val) {
-                errors.noteError = 'Notes is required'
-            }
-        });
-        if (result) {
-            if (!result.every((val) => val)) {
-                errors.queError = 'Please fill out all the question'
-            }
-        }
-        else {
-            if (!allQuestionError.every((val) => val)) {
-                errors.queError = 'Please fill out all the question'
-            }
-        }
+        examData.notes.map((val) => { (!val) && (errors.noteError = 'Notes is required') });
+        if (result) { (!result.every((val) => val)) && (errors.queError = 'Please fill out all the question') }
+        else { (!allQuestionError.every((val) => val)) && (errors.queError = 'Please fill out all the question') }
         setError(errors)
         return Object.values(errors).every((val) => !val);
-
     }, [examData, allQuestionError]);
 
     const handleSubmit = async () => {
-        let result = handleQuestionSave(currentQuestion);           
-            if (!handleValidate(result)) return;  
-            setIsSubmitting(true);
+        let result = handleQuestionSave(currentQuestion);
+        if (!handleValidate(result)) return;
+        setIsSubmitting(true);
     };
-
 
     const resetForm = () => {
         setExamData({
@@ -137,19 +120,16 @@ const TeacherForm = () => {
 
     useEffect(() => {
         if (isSubmitting) {
-
             const apiEndpoint = state?.examId ? `dashboard/Teachers/editExam?id=${state?.examId}` : "dashboard/Teachers/Exam";
             const requestMethod = state?.examId ? putRequest : postRequest;
             requestMethod(apiEndpoint, examData, { 'access-token': token })
                 .then((response) => {
                     if (response?.statusCode === 200) {
-                        console.log(response);
                         toast.success(state?.examId ? "Exam Updated Successfully!" : "Exam Created Successfully!");
                         resetForm();
                         if (state?.examId) {
                             navigate(-1);
                         }
-
                     } else {
                         toast.error(response?.message);
                     }
@@ -178,10 +158,9 @@ const TeacherForm = () => {
     return (
         <div>
             <div>
-                <h1 style={{textAlign:'center', color:"skyBlue"}}>{state?.existingExam ? "Edit Exam" : "Create Exam"}</h1>
-
-                <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px', }}>
-                    <div style={{ minWidth: "700px", maxWidth:"800px" }}>
+                <h1 style={{ textAlign: 'center', color: "rgb(18, 219, 206)" }}>{state?.existingExam ? "Edit Exam" : "Create Exam"}</h1>
+                <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px', flexWrap: "wrap" }}>
+                    <div style={{ maxWidth: "1100px" }}>
                         <label htmlFor='subjectName' style={{ fontSize: '20px' }}>Subject Name</label> <span style={{ color: 'red' }}>{error.subjectError}</span>
                         <InputCom type='text' name='subjectName' id='subjectName' value={examData.subjectName} onChange={(e) => setExamData({ ...examData, subjectName: e.target.value })} placeholder='Subject Name' />
                         <label style={{ display: 'inline-block', margin: "20px 0px", fontSize: "20px" }}>Question</label><span style={{ color: 'red' }}>{error.queError}</span>
@@ -192,64 +171,44 @@ const TeacherForm = () => {
                                     <InputCom name='question' type='text' placeholder="Enter question" id='question' value={examData?.questions[currentQuestion]?.question} onChange={(e) => handleInputChange(currentQuestion, "question", e.target.value)} />
                                 </div>
                                 <span style={{ color: 'red' }}>{questionsError.optionsError}</span>
-                                <div style={{ display: 'flex', alignItems: "center", gap: '10px', padding: '10px 0px' }}>
+                                <div style={{ display: 'flex', alignItems: "center", gap: '10px', padding: '10px 0px', flexWrap: "wrap" }}>
                                     {examData?.questions[currentQuestion]?.options && examData?.questions[currentQuestion]?.options.map((opt, idx) => (
                                         <div key={idx} >
-                                            <InputCom
-                                                type="text"
-                                                placeholder={`Option ${idx + 1}`}
-                                                value={opt}
-                                                onChange={(e) => handleOptionChange(currentQuestion, idx, e.target.value)}
-                                            />
-                                        </div>
-                                    ))}
+                                            <InputCom type="text" placeholder={`Option ${idx + 1}`} value={opt} onChange={(e) => handleOptionChange(currentQuestion, idx, e.target.value)} />
+                                        </div>))}
                                 </div>
                                 <div style={{ padding: '20px 0px' }}>
                                     <label>Select Correct Answer:  {examData?.questions[currentQuestion]?.answer}</label>
                                     <span style={{ color: 'red' }}>{questionsError.answerError}</span>
                                 </div>
-                                <div style={{ display: 'flex', gap: '10px' }} >
+                                <div style={{ display: 'flex', gap: '20px', flexWrap: "wrap", width: "100%", }} >
                                     {examData?.questions[currentQuestion]?.options && examData?.questions[currentQuestion]?.options.map((opt, idx) => {
                                         if (!opt) return
                                         return (
-                                            <div key={idx} style={{ display: "flex", width: "100%", }}>
-                                                <RadioCom
-                                                    name={`answer-${currentQuestion}`}
-                                                    value={opt}
-                                                    checked={examData.questions[currentQuestion].answer === opt}
-                                                    onChange={(e) => handleAnswerChange(currentQuestion, e.target.value)}
-                                                    text={opt}
-                                                />
+                                            <div key={idx} style={{ display: "flex", flexWrap: 'wrap', }}>
+                                                <RadioCom name={`answer-${currentQuestion}`} value={opt} checked={examData.questions[currentQuestion].answer === opt} onChange={(e) => handleAnswerChange(currentQuestion, e.target.value)} text={opt} />
                                             </div>
                                         )
                                     })}
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: "space-between", padding:"10px 0px" }}>
+                            <div style={{ display: 'flex', justifyContent: "space-between", padding: "10px 0px", flexWrap: 'wrap', gap: "10px" }}>
                                 <ButtonCom disabled={currentQuestion === 0} text='Previous' onClick={() => { handleQuestionSave(currentQuestion, 'previous') }} />
                                 <ButtonCom text='Next' disabled={currentQuestion === TOTAL_QUESTIONS - 1} onClick={() => { handleQuestionSave(currentQuestion, 'next') }} />
                             </div>
                         </div>
                         <label style={{ fontSize: '20px' }}>Notes</label><span style={{ color: 'red' }}>{error.noteError}</span>
                         {examData.notes.map((note, index) => (
-                            <InputCom
-                                key={index}
-                                type="text"
-                                placeholder={`Note ${index + 1}`}
-                                value={note}
-                                onChange={(e) => handleNoteChange(index, e.target.value)}
-                            />
+                            <InputCom key={index} type="text" placeholder={`Note ${index + 1}`} value={note} onChange={(e) => handleNoteChange(index, e.target.value)} />
                         ))}
-                        <div style={{ display: 'flex', justifyContent: "space-between",}}>
+                        <div style={{ display: 'flex', justifyContent: "space-between", flexWrap: 'wrap', gap: "10px" }}>
                             <ButtonCom text='Cancel' color='red' onClick={resetForm} style={{ backgroundColor: 'gray' }} />
                             <ButtonCom text='Back' onClick={() => navigate(-1)} />
                             <ButtonCom color='green' text={state?.existingExam ? "Update" : "Submit"} onClick={handleSubmit} />
                         </div>
                     </div>
                 </div>
-            
             </div>
-
         </div>
     )
 }

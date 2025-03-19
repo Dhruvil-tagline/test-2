@@ -1,13 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../Context/AuthProvider';
 import { getRequest, postRequest } from '../../utils/api';
 import ButtonCom from '../../CommonComponent/ButtonCom';
 import RadioCom from '../../CommonComponent/RadioCom';
+import Table from '../../CommonComponent/Table';
+import { toast } from 'react-toastify';
+const tableHeader = ['Index', 'Question', 'Answer', 'Action'];
+import './studCss/student.css'
+import { useLoader } from '../../Context/LoaderProvider';
+import Loader from '../../CommonComponent/Loader';
 
 const ExamForm = () => {
     const { state } = useLocation();
     const { token } = useAuth();
+    const { setLoading } = useLoader();
+    const navigate = useNavigate();
     const { id, subjectName, notes } = state;
     const [exam, setExam] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,20 +25,19 @@ const ExamForm = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             let response = await getRequest(`student/examPaper?id=${id}`, token);
-            if (response) {
-                console.log(response)
-            }
             if (response.statusCode === 200) {
-                console.log(response.data);
                 setExam(response.data);
                 let temArray = response.data.map((val) => {
                     return { "question": val._id, "answer": "" }
                 })
                 setSelectedAnswers(temArray);
+                setLoading(false);
             }
             else {
-                console.log(response?.error?.message)
+                console.log(response?.error?.message);
+                setLoading(false);
             }
         }
         fetchData()
@@ -45,7 +52,6 @@ const ExamForm = () => {
                 return val;
             }
         });
-        console.log(x)
         setSelectedAnswers(x);
     };
 
@@ -65,27 +71,35 @@ const ExamForm = () => {
         setReviewMode(false);
     };
     const handleSubmit = async () => {
-        console.log(selectedAnswers)
+        setLoading(true);
         const response = await postRequest(`student/giveExam?id=${id}`, selectedAnswers, { 'access-token': token });
-        if (response) {
-            console.log(response)
-        }
         if (response.statusCode === 200) {
-            console.log(response.data);
+            toast.success('Exam submitted successfully');
+            navigate("/student/dashboard");
+            setLoading(false);
         }
         else {
-            console.log(response?.error?.message)
+            toast.error(response?.error?.message);
+            setLoading(false);
         }
     }
+    const tableData = useMemo(() => {
+        return exam.map((q, idx) => ({
+            Index: idx + 1,
+            Question: q.question,
+            Answer: selectedAnswers[idx]?.answer,
+            Action: <ButtonCom text="Edit Answer" onClick={() => handleEditAnswer(idx)} />
+        }));
+    }, [exam, selectedAnswers]);
 
-    return (
-        <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ margin: "20px", padding: "15px", maxWidth: "600px", width: "100%", border: "1px solid gray", borderRadius: '10px   ' }}>
-
-                <h1 style={{ textAlign: 'center' }}>ExamForm</h1>
+    return ( 
+        <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', padding: "20px", }}>
+            <Loader />
+            <div style={{ margin: "20px", padding: "15px", maxWidth: "600px", width: "100%", border: "1px solid gray", borderRadius: '10px' }}>
+                <h1 className='heading'>ExamForm</h1>
                 <div>
-                    <hr />
-                    <div style={{ display: "flex", justifyContent: "space-between", margin: "20px 0px" }}>
+                    <hr className='horizontalRule' />
+                    <div style={{ display: "flex", justifyContent: "space-between", margin: "20px 0px", flexWrap: "wrap", gap: "15px" }}>
                         <p>Subject : {subjectName}</p>
                         <div>Notes:
                             {!!notes?.length && notes.map((res, idx) => (
@@ -99,7 +113,7 @@ const ExamForm = () => {
                         {!reviewMode ? (
                             <div>
                                 <p style={{ margin: "10px 0px", fontSize: '20px' }}>Question {currentQuestionIndex + 1}: {exam[currentQuestionIndex]?.question}</p>
-                                <div style={{ display: "flex", gap: "15px" }}>
+                                <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
                                     {exam[currentQuestionIndex]?.options.map((opt, index) => {
                                         return (
                                             <RadioCom
@@ -114,9 +128,9 @@ const ExamForm = () => {
                                     })}
                                 </div>
 
-                                <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0px" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0px", flexWrap: "wrap", gap: "15px" }}>
                                     <ButtonCom text="Previous" onClick={handlePrev} disabled={currentQuestionIndex === 0} />
-                                    {(isEditing && currentQuestionIndex !== exam.length -1 ) && <ButtonCom text="Submit and Review" onClick={handleSubmitAndReview} />}
+                                    {(isEditing && currentQuestionIndex !== exam.length - 1) && <ButtonCom text="Submit and Review" onClick={handleSubmitAndReview} />}
                                     {currentQuestionIndex < exam.length - 1 ? (
                                         <ButtonCom text="Next" onClick={handleNext} />
                                     ) : (
@@ -126,39 +140,11 @@ const ExamForm = () => {
 
                             </div>
                         ) : (
-                            <div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                                     <h2>Review Your Answers</h2>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                            <th>Index</th>
-                                            <th>Question</th>
-                                            <th>Anser</th>
-                                            <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {exam.map((q, idx) => (
-                                                <tr key={q._id} style={{ margin: "10px 0px" }}>
-                                                    <td>{ idx + 1}</td>
-                                                    <td>{q.question}</td>
-                                                    {selectedAnswers[idx].answer ? <td style={{ color: 'green' }}>{selectedAnswers[idx]?.answer}</td> : <td style={{ color: "red" }}>Not Answered</td>}
-                                                    <td>
-                                                    <ButtonCom text="Edit Answer" onClick={() => handleEditAnswer(idx)} />
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                {/* {exam.map((q, idx) => (
-                                    <div key={q._id} style={{ margin: "10px 0px" }}>
-                                        <p>Question {idx + 1}: {q.question}</p>
-                                        Answer:
-                                        {selectedAnswers[idx].answer ? <span style={{ color: 'green' }}>{selectedAnswers[idx]?.answer}</span> : <span style={{ color: "red" }}>Not Answered</span>}
-                                        <ButtonCom text="Edit Answer" onClick={() => handleEditAnswer(idx)} />
-                                        <hr style={{ border: "0.1px dashed gray" }} />
+                                    <div>
+                                        <Table tableData={tableData} tableHeader={tableHeader} />
                                     </div>
-                                ))} */}
                                 <ButtonCom text="Final Submit" onClick={handleSubmit} />
                             </div>
                         )}

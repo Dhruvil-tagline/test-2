@@ -14,8 +14,8 @@ const TeacherPage = ({navObj}) => {
     }
     return (
         <div>
-            <nav style={{ display: 'flex', background: 'black', justifyContent: "space-between", alignItems: "center", padding: "0px 5%", }}>
-                <div style={{ display: 'flex', gap: '40px' }}>
+            <nav>
+                <div className='innerNav'>
                     {
                         navObj && navObj.map((val, index) => (
                             <NavLink key={index} className={({ isActive }) => isActive ? "active" : ""} to={val.to}>{val.text}</NavLink>

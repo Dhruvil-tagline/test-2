@@ -3,3 +3,28 @@
     font-size: medium;
 }
 
+ .authContainer{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    padding: 20px;
+ }
+
+ .authInnerDiv{
+    border: 1px solid gray;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    border-radius: 10px;
+ }
+    
+.authHeading{
+    text-align: center;
+    color: rgb(18, 219, 206);
+}
+
+.form{
+  max-width: 600px;
+  width: 100%;
+}

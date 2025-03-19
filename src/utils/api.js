@@ -17,16 +17,12 @@ export const postRequest = async (url, data, headers = {}) => {
 };
 
 export const putRequest = async (url, data, headers = {}) => {
-    console.log(url)
-    console.log(data)
-    console.log(headers);
     try {
         const response = await axios.put(`${API_BASE_URL}/${url}`, data, {
             headers: { 'Content-Type': 'application/json', ...headers }
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         toast.error(error?.message || 'server Error');
     }
 };
@@ -38,8 +34,7 @@ export const getRequest = async (url, token = '') => {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('Server Error');
+        toast.error(error?.message || 'server Error');
     }
 };
 
@@ -52,8 +47,7 @@ export const deleteRequest = async (url, token = '') => {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('Server Error');
+        toast.error(error?.message || 'server Error');
     }
 }
 
