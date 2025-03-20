@@ -37,7 +37,7 @@ const ResetPassword = () => {
     }
   }
   return (
-    <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', height: "80vh", width: "100%" }}>
+    <div style={{ display: "flex", justifyContent: 'center', alignItems: 'center', width: "100%",marginTop:"10px" }}>
       <Loader/>
       <div style={{ maxWidth: '600px', width: '100%', margin: "30px 0px", padding: "20px", border: '1px solid gray', borderRadius: "10px", margin: "20px" }}>
         <form onSubmit={handleSubmit} style={{ maxWidth: '600px', width: '100%' }}>

@@ -6,4 +6,11 @@
     border-radius: 5px;
     background-color: transparent;
     border: 1px solid gray;
- }
+   transition: border-color 1s ease;
+   }
+   
+   .input:focus {
+      border-color: rgb(18, 219, 206);
+      background-color: black;
+   }
+   

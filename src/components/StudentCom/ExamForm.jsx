@@ -37,8 +37,7 @@ const ExamForm = () => {
             }
             else {
                 console.log(response?.error?.message);
-                setLoading(false);
-            }
+                setLoading(false); }
         }
         fetchData()
     }, []);
@@ -96,7 +95,7 @@ const ExamForm = () => {
         <div style={{ display: "flex", flexDirection: 'column', alignItems: 'center', padding: "20px", }}>
             <Loader />
             <div style={{ margin: "20px", padding: "15px", maxWidth: "600px", width: "100%", border: "1px solid gray", borderRadius: '10px' }}>
-                <h1 className='heading'>ExamForm</h1>
+                <h1 className='heading' style={{marginBottom:"10px"}}>ExamForm</h1>
                 <div>
                     <hr className='horizontalRule' />
                     <div style={{ display: "flex", justifyContent: "space-between", margin: "20px 0px", flexWrap: "wrap", gap: "15px" }}>
@@ -128,7 +127,7 @@ const ExamForm = () => {
                                     })}
                                 </div>
 
-                                <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0px", flexWrap: "wrap", gap: "15px" }}>
+                                <div style={{ display: "flex", justifyContent: "space-between", margin: "10px 0px", flexWrap: "wrap", gap: "15px", marginTop:"20px" }}>
                                     <ButtonCom text="Previous" onClick={handlePrev} disabled={currentQuestionIndex === 0} />
                                     {(isEditing && currentQuestionIndex !== exam.length - 1) && <ButtonCom text="Submit and Review" onClick={handleSubmitAndReview} />}
                                     {currentQuestionIndex < exam.length - 1 ? (

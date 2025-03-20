@@ -7,7 +7,7 @@ const RadioCom = ({ text, name, value, onChange, checked }) => {
     <>
       <div>
         <input type='radio' className='radio' checked={checked} id={id} name={name} onChange={onChange} value={value} />
-        <label htmlFor={id}>{text}</label>
+        <label htmlFor={id} style={{marginLeft:"5px"}}>{text}</label>
       </div>
     </>
   )

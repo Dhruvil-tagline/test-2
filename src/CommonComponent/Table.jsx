@@ -6,7 +6,7 @@ const Table = ({ tableHeader, tableData, dataNotFound }) => {
       <table style={{ width: "100%", height: "100%" }}>
         <thead >
           <tr>
-            {!!tableHeader.length && tableHeader.map((val, index) => <th style={{ padding: "25px", background: 'black',color:"orange" }} key={index}>{val}</th>)}
+            {!!tableHeader.length && tableHeader.map((val, index) => <th style={{ padding: "25px", background: 'black', color:"rgb(18, 219, 206)" }} key={index}>{val}</th>)}
           </tr>
         </thead>
         <tbody>

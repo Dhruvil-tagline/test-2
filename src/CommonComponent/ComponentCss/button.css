@@ -1,5 +1,6 @@
 button:hover {
     background-color: rgb(18, 219, 206);
+    color: black;
 }
 
 .button{
@@ -9,6 +10,7 @@ button:hover {
     font-size: 1em;
     background: #1a1a1a;
     cursor: pointer;
+    color: var(--button-color);
 }
 
 

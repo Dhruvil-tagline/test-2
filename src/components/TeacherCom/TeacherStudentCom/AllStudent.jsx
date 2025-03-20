@@ -17,7 +17,6 @@ const AllStudent = () => {
         const fetchData = async () => {
             const response = await getRequest(apiEndpoint, token);
             if (response.statusCode === 200) {
-                console.log(response.data);
                 setStudents(response.data);
                 setDataNoFound(true);
             }

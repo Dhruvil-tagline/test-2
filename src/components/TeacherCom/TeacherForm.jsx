@@ -7,11 +7,14 @@ import InputCom from '../../CommonComponent/InputCom';
 import RadioCom from '../../CommonComponent/RadioCom';
 import ButtonCom from '../../CommonComponent/ButtonCom';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useLoader } from '../../Context/LoaderProvider';
+import Loader from '../../CommonComponent/Loader';
 const TOTAL_QUESTIONS = 15;
 
 const TeacherForm = () => {
     const { token } = useAuth();
     const navigate = useNavigate();
+    const { setLoading } = useLoader();
     const { state } = useLocation();
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [allQuestionError, setAllQuestionError] = useState(Array(15).fill(false))
@@ -122,6 +125,7 @@ const TeacherForm = () => {
         if (isSubmitting) {
             const apiEndpoint = state?.examId ? `dashboard/Teachers/editExam?id=${state?.examId}` : "dashboard/Teachers/Exam";
             const requestMethod = state?.examId ? putRequest : postRequest;
+            setLoading(true);
             requestMethod(apiEndpoint, examData, { 'access-token': token })
                 .then((response) => {
                     if (response?.statusCode === 200) {
@@ -136,6 +140,7 @@ const TeacherForm = () => {
                 })
                 .finally(() => {
                     setIsSubmitting(false);
+                    setLoading(false);
                 });
         }
     }, [isSubmitting]);
@@ -158,6 +163,7 @@ const TeacherForm = () => {
     return (
         <div>
             <div>
+                 <Loader/>
                 <h1 style={{ textAlign: 'center', color: "rgb(18, 219, 206)" }}>{state?.existingExam ? "Edit Exam" : "Create Exam"}</h1>
                 <div style={{ display: 'flex', justifyContent: 'center', height: '100%', alignItems: "center", padding: '20px', flexWrap: "wrap" }}>
                     <div style={{ maxWidth: "1100px" }}>

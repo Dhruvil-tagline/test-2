@@ -1,11 +1,12 @@
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import './studCss/studentNav.css'
 
 const StudentProfile = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: "column", alignItems: 'center', padding:"0px 20px" }}>
-            <nav>
-                <Link to='/student/profile/editName'>Edit Name</Link>
-                <Link to='/student/profile/resetPassword'>Change Password</Link>
+        <div className='stuContainer'>
+            <nav className='StudentNavbar'>
+                <NavLink className={({ isActive }) => isActive ? "StuActive" : " "} to='/student/profile/editName'>Edit Name</NavLink>
+                <NavLink className={({ isActive }) => isActive ? "StuActive" : ""} to='/student/profile/resetPassword'>Change Password</NavLink>
             </nav>
 
             <Outlet/>

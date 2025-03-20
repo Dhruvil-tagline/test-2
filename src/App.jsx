@@ -126,7 +126,11 @@ const router = createBrowserRouter([
     path: '*',
     element: <PageNotFound />
   }
-])
+], {
+  future: {
+    v7_relativeSplatPath: true, 
+  },
+})
 
 function App() {
   return (
